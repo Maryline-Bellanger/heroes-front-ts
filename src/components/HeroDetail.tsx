@@ -1,19 +1,28 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import {HeroData} from '../interfaces/Heroes';
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+type HeroParams = {
+  id: string;
+};
 
-interface HeroDetailProps {
-  oneHero: HeroData | null
-}
-
-const HeroDetail: React.FC<HeroDetailProps> =  ({oneHero}) => {
-
+  function HeroDetail() {
   const navigate = useNavigate();
+  const { id } = useParams<HeroParams>();
+  const [oneHero, setOneHero] = useState<HeroData>();
+
+  useEffect(() => {
+    const getHero = async() => {
+      const response = await fetch(`http://localhost:8000/heroes/${id}`)
+      const data = await response.json()
+      setOneHero(data)
+    }
+    getHero()
+  }, [id])
   
   return (
-    <div  style={{display: 'flex', justifyContent:'center'}}>
+    <div  style={{display: 'flex', justifyContent:'center', paddingTop: '20px'}}>
       <Card sx={{maxWidth: 400}} style={{display:'flex', flexDirection:'column', justifyContent:'center'}} >
         <CardMedia
           component='img' 

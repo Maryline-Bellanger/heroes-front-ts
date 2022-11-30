@@ -1,8 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 import './App.css';
-import Hero from './pages/Hero';
-import Heroes from './pages/Heroes';
+import HeroDetail from './components/HeroDetail';
 import HeroesList from './pages/HeroesList';
 
 function App() {
@@ -12,7 +10,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Navigate to='heroes' />} />
           <Route path='/heroes' element={<HeroesList />} />
-          <Route path='/hero/:id' element={<Hero />} />
+          <Route path='/hero/:id' element={<HeroDetail />} />
         </Routes>
       </Router>
     </div>
