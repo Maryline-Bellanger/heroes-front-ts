@@ -1,60 +1,73 @@
-import { useEffect, useState } from 'react'
-import {HeroData} from '../interfaces/Heroes';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+/* eslint-disable no-restricted-globals */
+import { useState } from 'react'
+import {IHeroData} from '../interfaces/IHeroes';
+import { Card, CardActions, CardContent, CardMedia, Button, Typography, Box, Dialog, DialogProps, DialogContent } from '@mui/material';
 
-type HeroParams = {
-  id: string;
-};
+interface IHeroDetailsProps {
+  hero: IHeroData
+}
 
-  function HeroDetail() {
-  const navigate = useNavigate();
-  const { id } = useParams<HeroParams>();
-  const [oneHero, setOneHero] = useState<HeroData>();
+  function HeroDetail({hero}: IHeroDetailsProps) {
+  const [open, setOpen] = useState(false);
+  const [scroll, setScroll] = useState<DialogProps['scroll']>('paper');
 
-  useEffect(() => {
-    const getHero = async() => {
-      const response = await fetch(`http://localhost:8000/heroes/${id}`)
-      const data = await response.json()
-      setOneHero(data)
-    }
-    getHero()
-  }, [id])
-  
+  const handleClickOpen = (scrollType: DialogProps['scroll']) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <div  style={{display: 'flex', justifyContent:'center', paddingTop: '20px'}}>
-      <Card sx={{maxWidth: 400}} style={{display:'flex', flexDirection:'column', justifyContent:'center'}} >
-        <CardMedia
-          component='img' 
-          height='100%'
-          image={oneHero?.image}
-          alt={oneHero?.name}
-        />
-        <CardContent>
-          <Typography textAlign='center' textTransform='uppercase' fontWeight='bold'>
-            {oneHero?.name}
-          </Typography>
-          <Typography textAlign='center' color='text.secondary'>
-            Genre : {oneHero?.gender} - Race : {oneHero?.race}
-          </Typography>
-          <Typography textAlign='center' color='text.secondary'>
-            Taille : {oneHero?.height} - Poids : {oneHero?.weight}
-          </Typography>
-          <Typography textAlign='center' marginTop={2}>Stats</Typography>
-          <Typography textAlign='center' color='text.secondary'>
-            Vitesse : {oneHero?.speed} - Force : {oneHero?.power}
-          </Typography>
-          <Typography textAlign='center' color='text.secondary'>
-            Endurance : {oneHero?.stamina}
-          </Typography>
-        </CardContent>
-        <CardActions  style={{justifyContent: 'center'}}>
-          <Button size='small' onClick={() => navigate('/heroes')}>
-            Retour
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
+    <Box>
+      <Button 
+        size='small' 
+        onClick={handleClickOpen('paper')} color="secondary"
+      >
+        Détail
+      </Button>
+      <Dialog 
+        open={open}
+        onClose={handleClose}
+        scroll={scroll}
+      >
+        <DialogContent dividers={scroll === 'paper'}>
+        <Card sx={{maxWidth: 400}} style={{display:'flex', flexDirection:'column', justifyContent:'center', textAlign: "center"}} >
+          <CardMedia
+            component='img' 
+            height='100%'
+            image={hero?.image}
+            alt={hero?.name}
+          />
+          <CardContent>
+            <Typography textAlign='center' textTransform='uppercase' fontWeight='bold'>
+              {hero?.name}
+            </Typography>
+            <Typography textAlign='center' color='text.secondary'>
+              Genre : {hero?.gender} - Race : {hero?.race}
+            </Typography>
+            <Typography textAlign='center' color='text.secondary'>
+              Taille : {hero?.height} - Poids : {hero?.weight}
+            </Typography>
+            <Typography textAlign='center' marginTop={2}>Stats</Typography>
+            <Typography textAlign='center' color='text.secondary'>
+              Vitesse : {hero?.speed} - Force : {hero?.power}
+            </Typography>
+            <Typography textAlign='center' color='text.secondary'>
+              Endurance : {hero?.stamina}
+            </Typography>
+          </CardContent>
+          <CardActions  style={{justifyContent: 'center'}}>
+            <Button size='small' onClick={handleClose} color="secondary">
+              Retour
+            </Button>
+          </CardActions>
+        </Card>
+        </DialogContent>
+      </Dialog>
+    </Box>
   )
 }
 

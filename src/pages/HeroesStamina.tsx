@@ -1,12 +1,12 @@
+import { Box, Grid } from '@mui/material'
+import { IHeroData } from '../interfaces/IHeroes'
 import HeroCard from '../components/HeroCard';
-import {Box, Grid} from '@mui/material';
-import { IHeroData } from '../interfaces/IHeroes';
 
-interface IHeroesProps {
+interface IHeroesStaminaProps {
   heroes: Array<IHeroData>;
 }
 
-function HeroesList({heroes}: IHeroesProps) {
+function HeroesStamina({heroes}: IHeroesStaminaProps) {
   return (
     <Box style={{
       display: 'flex',
@@ -20,6 +20,7 @@ function HeroesList({heroes}: IHeroesProps) {
         .sort(function(a,b){
           return a.name.localeCompare(b.name)
         })
+        .filter((hero) => hero.stamina > 80)
         .map((hero) => (
           <Grid key={hero.id} paddingY={2}>
             <HeroCard hero={hero} />
@@ -31,4 +32,4 @@ function HeroesList({heroes}: IHeroesProps) {
   )
 }
 
-export default HeroesList;
+export default HeroesStamina

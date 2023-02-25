@@ -1,4 +1,4 @@
-export interface HeroData {
+export interface IHeroData {
   name: string;
   id: number;
   image: string;
@@ -9,4 +9,5 @@ export interface HeroData {
   race: string;
   height: string;
   weight: string;
+  marvel: boolean;
 }
